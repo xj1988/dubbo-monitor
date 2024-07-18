@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- https://www.cnblogs.com/bmwhero/p/16951505.html -->
+<configuration status="TRACE" monitorInterval="30">
+
+    <appenders>
+        <console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %c{1}:%L %msg%n"/>
+        </console>
+    </appenders>
+
+    <loggers>
+
+        <Logger name="org.apache.ibatis" level="DEBUG"/>
+
+        <Logger name="com.handu" level="DEBUG"/>
+
+        <root level="info">
+            <appender-ref ref="Console"/>
+        </root>
+    </loggers>
+
+</configuration>

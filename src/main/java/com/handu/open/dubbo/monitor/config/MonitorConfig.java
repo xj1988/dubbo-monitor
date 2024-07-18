@@ -31,4 +31,8 @@ import org.springframework.context.annotation.PropertySource;
 @Import({WebConfig.class, DubboConfig.class, MyBatisConfig.class, Security.class})
 @PropertySource("classpath:/application.properties")
 public class MonitorConfig {
+    static {
+        // {@link com.alibaba.dubbo.common.logger.LoggerFactory}
+        System.setProperty("dubbo.application.logger", "slf4j");
+    }
 }

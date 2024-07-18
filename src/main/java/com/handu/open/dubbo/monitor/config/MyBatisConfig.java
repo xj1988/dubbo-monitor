@@ -17,6 +17,7 @@ package com.handu.open.dubbo.monitor.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.google.common.base.Preconditions;
+import org.apache.ibatis.mapping.VendorDatabaseIdProvider;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.springframework.beans.BeansException;
@@ -43,24 +44,30 @@ public class MyBatisConfig implements ApplicationContextAware {
 
     private ApplicationContext context;
 
-    private static final String DB_URL = "db.url";
-    private static final String DB_USERNAME = "db.username";
-    private static final String DB_PASSWORD = "db.password";
-    private static final String DB_MAX_ACTIVE = "db.maxActive";
+    public static final String DB_URL = "db.url";
+    public static final String DB_USERNAME = "db.username";
+    public static final String DB_PASSWORD = "db.password";
+    public static final String DB_MAX_ACTIVE = "db.maxActive";
+    public static final String DB_INIT_SCRIPT = "db.initScript";
+    public static final String DB_VALIDATION_QUERY = "db.validationQuery";
+    public static final String DB_MAX_WAIT = "db.maxWait";
 
     @Bean
     public DruidDataSource dataSource() {
         final String url = Preconditions.checkNotNull(env.getProperty(DB_URL));
-        final String username = Preconditions.checkNotNull(env.getProperty(DB_USERNAME));
+        final String username = env.getProperty(DB_USERNAME);
         final String password = env.getProperty(DB_PASSWORD);
         final int maxActive = Integer.parseInt(env.getProperty(DB_MAX_ACTIVE, "200"));
+        final String validationQuery = env.getProperty(DB_VALIDATION_QUERY, "SELECT 1");
+        final int maxWait = Integer.parseInt(env.getProperty(DB_MAX_WAIT, "6000"));
 
         DruidDataSource dataSource = new DruidDataSource();
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         dataSource.setMaxActive(maxActive);
-
+        dataSource.setValidationQuery(validationQuery);
+        dataSource.setMaxWait(maxWait);
         return dataSource;
     }
 
@@ -69,6 +76,7 @@ public class MyBatisConfig implements ApplicationContextAware {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(dataSource());
         factoryBean.setMapperLocations(context.getResources("classpath*:mappers/**/*.xml"));
+        factoryBean.setDatabaseIdProvider(new VendorDatabaseIdProvider());
         return factoryBean.getObject();
     }
 

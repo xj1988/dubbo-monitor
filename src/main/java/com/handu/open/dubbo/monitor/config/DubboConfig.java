@@ -59,6 +59,7 @@ public class DubboConfig {
     public RegistryConfig registryConfig() {
         RegistryConfig registryConfig = new RegistryConfig();
         registryConfig.setAddress(env.getProperty(REGISTRY_ADDRESS));
+        registryConfig.setFile("dubbo-registry-cache/dubbo-monitor.properties");
         return registryConfig;
     }
 
